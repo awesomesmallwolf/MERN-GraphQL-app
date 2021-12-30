@@ -2,6 +2,8 @@ import express from 'express';
 import http from 'http';
 require('dotenv').config();
 
+import './mongodb/connect';
+
 const startServer = async () => {
   const { SERVER_HOST, SERVER_PORT } = process.env;
   const app = express();
