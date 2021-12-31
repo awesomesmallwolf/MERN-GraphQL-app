@@ -1,5 +1,6 @@
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { ChakraProvider } from '@chakra-ui/react';
 
 import { App } from 'app/modules/App';
 import reportWebVitals from './reportWebVitals';
@@ -8,9 +9,11 @@ import { store } from 'app/store';
 
 const renderApp = () =>
   render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
+    <ChakraProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ChakraProvider>,
     document.getElementById('app-root'),
   );
 
