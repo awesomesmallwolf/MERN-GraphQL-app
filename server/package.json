@@ -5,6 +5,8 @@
   "repository": "https://github.com/davedevx/todo-mern-graphql-docker",
   "author": "davedevx (https://github.com/davedevx)",
   "dependencies": {
+    "apollo-server-core": "^3.5.0",
+    "apollo-server-express": "^3.5.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "graphql": "^15.8.0",
