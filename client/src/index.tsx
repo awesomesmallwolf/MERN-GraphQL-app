@@ -1,18 +1,22 @@
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ChakraProvider } from '@chakra-ui/react';
+import { ApolloProvider } from '@apollo/client';
 
 import { App } from 'app/modules/App';
 import reportWebVitals from './reportWebVitals';
 
 import { store } from 'app/store';
+import apolloClient from 'app/apollo-client';
 
 const renderApp = () =>
   render(
     <ChakraProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <ApolloProvider client={apolloClient}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ApolloProvider>
     </ChakraProvider>,
     document.getElementById('app-root'),
   );
