@@ -16,6 +16,9 @@ export const todo = createModel<RootModel>()({
     add(state, todo: TodoItem): TodoItem[] {
       return [...state, todo];
     },
+    addTodos(state, todos: TodoItem[]): TodoItem[] {
+      return [...state, ...todos];
+    },
     delete(state, id: TodoItem['id']): TodoItem[] {
       return state.filter((item) => item.id !== id);
     },
