@@ -6,8 +6,8 @@ import { ApolloProvider } from '@apollo/client';
 import { App } from 'app/modules/App';
 import reportWebVitals from './reportWebVitals';
 
-import { store } from 'app/store';
-import apolloClient from 'app/apollo-client';
+import { store } from 'app/core/store';
+import apolloClient from 'app/core/apollo-client';
 
 const renderApp = () =>
   render(
