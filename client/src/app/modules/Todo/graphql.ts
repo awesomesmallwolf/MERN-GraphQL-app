@@ -17,3 +17,12 @@ export const CREATE_TODO = gql`
     }
   }
 `;
+
+export const DELETE_TODO = gql`
+  mutation Mutation($id: String!) {
+    deleteTodo(id: $id) {
+      id
+      label
+    }
+  }
+`;

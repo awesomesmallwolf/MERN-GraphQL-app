@@ -7,19 +7,26 @@ import {
   IconButton,
   ListItem,
   Spacer,
+  Spinner,
 } from '@chakra-ui/react';
 import { RiDeleteBin7Line } from 'react-icons/ri';
+import { useMutation } from '@apollo/client';
 
-import { TodoItem } from 'app/store/models/todo';
-import { Dispatch } from 'app/store';
+import { TodoItem } from 'app/core/store/models/todo';
+import { Dispatch } from 'app/core/store';
+import { DELETE_TODO } from '../../graphql';
 
 const TodoListItem: React.FC<TodoItem> = (todoItem) => {
   const dispatch = useDispatch<Dispatch>();
+  const [deleteTodo, { loading }] = useMutation(DELETE_TODO);
 
-  const handleDeleteTodo = useCallback(
-    () => dispatch.todo.delete(todoItem.id),
-    [dispatch, todoItem],
-  );
+  const handleDeleteTodo = useCallback(async () => {
+    const resp = await deleteTodo({ variables: { id: todoItem.id } });
+
+    if (resp.data.deleteTodo.id === todoItem.id) {
+      dispatch.todo.delete(todoItem.id);
+    }
+  }, [deleteTodo, dispatch, todoItem]);
 
   return (
     <ListItem>
@@ -34,8 +41,9 @@ const TodoListItem: React.FC<TodoItem> = (todoItem) => {
             variant="outline"
             aria-label="Delete todo"
             size="xs"
-            icon={<Icon as={RiDeleteBin7Line} />}
+            icon={<Icon as={loading ? Spinner : RiDeleteBin7Line} />}
             onClick={handleDeleteTodo}
+            disabled={loading}
           />
         </Box>
       </Flex>
