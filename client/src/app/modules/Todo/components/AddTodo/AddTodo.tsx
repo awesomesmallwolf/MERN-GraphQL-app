@@ -7,15 +7,27 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
 } from '@chakra-ui/react';
+import { useMutation } from '@apollo/client';
 
-import { Dispatch } from 'app/store';
+import './AddTodo.scss';
+import { Dispatch } from 'app/core/store';
+import { CREATE_TODO } from '../../graphql';
 
 const AddTodo: React.FC = () => {
   const [label, setLabel] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
   const dispatch = useDispatch<Dispatch>();
   const labelInput = useRef<HTMLInputElement>(null);
+  const [createTodo, { loading, error: createError }] = useMutation(
+    CREATE_TODO,
+    {
+      variables: {
+        label,
+      },
+    },
+  );
 
   const handleChangeLabel = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -23,27 +35,25 @@ const AddTodo: React.FC = () => {
     [setLabel],
   );
   const handleFormSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-
-      setError(false);
 
       if (label.trim() === '') {
         setError(true);
         return;
       }
 
-      dispatch.todo.add({
-        id: `${new Date().getTime()}`,
-        label,
-        created: new Date().getTime(),
-      });
-
-      setLabel('');
-
       labelInput.current?.focus();
+
+      const resp = await createTodo();
+
+      if (resp.data.createTodo) {
+        dispatch.todo.add(resp.data.createTodo);
+        setLabel('');
+        setError(false);
+      }
     },
-    [dispatch, label, labelInput, setError],
+    [createTodo, dispatch, label, labelInput, setError],
   );
 
   return (
@@ -58,18 +68,28 @@ const AddTodo: React.FC = () => {
             value={label}
             onChange={handleChangeLabel}
             ref={labelInput}
+            disabled={loading}
           />
-          <FormErrorMessage>Enter some label.</FormErrorMessage>
           <InputRightElement
             width="4.5rem"
             children={
-              <Button size="sm" colorScheme="teal" type="submit">
-                Add
+              <Button
+                size="sm"
+                colorScheme="teal"
+                type="submit"
+                disabled={loading}
+              >
+                {!loading && 'Add'}
+                {loading && <Spinner size="sm" />}
               </Button>
             }
           />
         </InputGroup>
+        <FormErrorMessage>Enter some label.</FormErrorMessage>
       </FormControl>
+      {createError && (
+        <p className="error">Oops, an error occurred. Please try again.</p>
+      )}
     </form>
   );
 };

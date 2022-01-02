@@ -8,3 +8,12 @@ export const GET_TODOS = gql`
     }
   }
 `;
+
+export const CREATE_TODO = gql`
+  mutation Mutation($label: String!) {
+    createTodo(label: $label) {
+      id
+      label
+    }
+  }
+`;
