@@ -61,6 +61,7 @@ const AddTodo: React.FC = () => {
       <FormControl isInvalid={error}>
         <InputGroup>
           <Input
+            type="text"
             pr="4.5rem"
             isInvalid={error}
             errorBorderColor="crimson"
