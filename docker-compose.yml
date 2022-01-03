@@ -1,0 +1,62 @@
+version: "1.0"
+
+services:
+  client:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: todo-mern-crud-graphql-client
+    ports:
+      - 3000:3000
+    networks:
+      - todo-mern-crud-graphql-network
+    volumes:
+      - ./client/src:/usr/app/src
+      - ./client/public:/usr/app/public
+    depends_on:
+      - server
+    env_file: ./client/.env
+    environment:
+      - REACT_APP_GRAPHQL_SERVER_URL=${SERVER_URL:-http://localhost:8080/graphql}
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
+  
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: todo-mern-crud-graphql-server
+    ports:
+      - 8080:8080
+    networks:
+      - todo-mern-crud-graphql-network
+    volumes:
+      - ./server/src:/usr/app/src
+    depends_on:
+      - db
+    env_file: ./server/.env
+    environment:
+      - MONGODB_URL=${MONGODB_URL:-mongodb://todo-mern-graphql-mongodb:27017}
+      - SERVER_URL=${SERVER_URL:-http://localhost}
+      - SERVER_PORT=${SERVER_PORT:-8080}
+      - GRAPHQL_SERVER_PATH=${GRAPHQL_SERVER_PATH:-/graphql}
+      - CLIENT=http://localhost:3000
+
+  db:
+    image: mongo:5.0.4
+    container_name: todo-mern-graphql-mongodb
+    ports:
+      - 27017:27017
+    networks:
+      - todo-mern-crud-graphql-network
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  todo-mern-crud-graphql-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
