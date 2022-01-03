@@ -16,7 +16,7 @@ const resolvers = {
     createTodo: (_, { label }) => {
       const newTodo = new Todo({
         label,
-        created: new Date().getTime(),
+        created: new Date(),
       });
 
       newTodo.id = newTodo._id;

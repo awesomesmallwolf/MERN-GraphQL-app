@@ -10,8 +10,8 @@ const todoSchema = new Schema({
     type: String,
   },
   created: {
-    type: Number,
-    default: new Date().getTime(),
+    type: Date,
+    default: new Date(),
   },
 });
 
