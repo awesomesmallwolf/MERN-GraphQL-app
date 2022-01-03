@@ -55,6 +55,7 @@ const AddTodo: React.FC = () => {
     },
     [createTodo, dispatch, label, labelInput, setError],
   );
+  const disabledAddButton = loading || label.trim() === '';
 
   return (
     <form onSubmit={handleFormSubmit}>
@@ -78,7 +79,7 @@ const AddTodo: React.FC = () => {
                 size="sm"
                 colorScheme="teal"
                 type="submit"
-                disabled={loading}
+                disabled={disabledAddButton}
               >
                 {!loading && 'Add'}
                 {loading && <Spinner size="sm" />}
