@@ -4,7 +4,7 @@ const typeDefs = gql`
   scalar Date
 
   type Todo {
-    id: String!
+    id: ID!
     label: String!
     created: Date!
   }
@@ -15,7 +15,7 @@ const typeDefs = gql`
 
   type Mutation {
     createTodo(label: String!): Todo!
-    deleteTodo(id: String!): Todo
+    deleteTodo(id: ID!): Todo
   }
 `;
 
