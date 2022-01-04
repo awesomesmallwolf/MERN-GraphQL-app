@@ -2,7 +2,7 @@ version: "1.0"
 
 services:
   client:
-    build: 
+    build:
       context: ./client
       dockerfile: Dockerfile
     container_name: todo-mern-crud-graphql-client
@@ -17,11 +17,10 @@ services:
       - server
     env_file: ./client/.env
     environment:
-      - REACT_APP_GRAPHQL_SERVER_URL=${SERVER_URL:-http://localhost:8080/graphql}
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true
     tty: true
-  
+
   server:
     build:
       context: ./server
@@ -36,12 +35,6 @@ services:
     depends_on:
       - db
     env_file: ./server/.env
-    environment:
-      - MONGODB_URL=${MONGODB_URL:-mongodb://todo-mern-graphql-mongodb:27017}
-      - SERVER_URL=${SERVER_URL:-http://localhost}
-      - SERVER_PORT=${SERVER_PORT:-8080}
-      - GRAPHQL_SERVER_PATH=${GRAPHQL_SERVER_PATH:-/graphql}
-      - CLIENT=http://localhost:3000
 
   db:
     image: mongo:5.0.4
